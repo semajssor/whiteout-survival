@@ -6,17 +6,18 @@ import cors from 'cors';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI;
 
 mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
 })
 .then(() => {
   console.log('Connected to MongoDB');
@@ -86,9 +87,17 @@ app.get('/members', async (req, res) => {
   }
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
+
+// Serve index.html for the root route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+// Serve static assets including images
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

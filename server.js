@@ -4,35 +4,31 @@ import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-// Load environment variables
 dotenv.config();
 
-// Initialize Express app
-const app = express();
-app.use(express.json());
-
-// Determine the current directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static files from the 'public' directory
+const app = express();
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI;
 
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
-  });
+mongoose.connect(mongoURI, {
+})
+.then(() => {
+  console.log('Connected to MongoDB');
+})
+.catch((err) => {
+  console.error('Error connecting to MongoDB:', err);
+});
 
 const memberSchema = new mongoose.Schema({
-  rank: String,
+  rank: Number,
   username: { type: String, unique: true },
-  power: Number,
+  power: String,
   level: Number
 });
 const Member = mongoose.model('Member', memberSchema);
@@ -45,20 +41,25 @@ app.post('/members', async (req, res) => {
     res.status(201).send(newMember);
   } catch (error) {
     console.error('Error inserting member:', error);
-    res.status(400).send(error);
+    res.status(400).send({ message: 'Error adding member' });
   }
 });
 
 app.put('/members/:username', async (req, res) => {
   try {
-    const member = await Member.findOneAndUpdate({ username: req.params.username }, req.body, { new: true });
-    if (!member) {
-      return res.status(404).send();
+    const { rank, power, level } = req.body;
+    const updatedMember = await Member.findOneAndUpdate(
+      { username: req.params.username },
+      { rank, power, level },
+      { new: true }
+    );
+    if (!updatedMember) {
+      return res.status(404).send({ message: 'Member not found' });
     }
-    res.send(member);
+    res.send(updatedMember);
   } catch (error) {
     console.error('Error updating member:', error);
-    res.status(400).send(error);
+    res.status(400).send({ message: 'Error updating member' });
   }
 });
 
@@ -66,21 +67,33 @@ app.delete('/members/:username', async (req, res) => {
   try {
     const member = await Member.findOneAndDelete({ username: req.params.username });
     if (!member) {
-      return res.status(404).send();
+      return res.status(404).send({ message: 'Member not found' });
     }
     res.send(member);
   } catch (error) {
     console.error('Error deleting member:', error);
-    res.status(400).send(error);
+    res.status(400).send({ message: 'Error deleting member' });
   }
 });
 
-// Serve 'index.html' for all other routes
-app.get('*', (req, res) => {
+app.get('/members', async (req, res) => {
+  try {
+    const members = await Member.find();
+    res.send(members);
+  } catch (error) {
+    console.error('Error fetching members:', error);
+    res.status(500).send({ message: 'Error fetching members' });
+  }
+});
+
+// Serve index.html for the root route
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Start the server
+// Serve static assets including images
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

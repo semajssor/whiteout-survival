@@ -77,7 +77,7 @@ app.delete('/members/:username', async (req, res) => {
 
 // Serve 'index.html' for all other routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start the server

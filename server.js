@@ -1,13 +1,21 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
-import path from 'path'; // Node.js module for working with file paths
+import { fileURLToPath } from 'url';
+import path from 'path';
 
+// Load environment variables
 dotenv.config();
 
+// Initialize Express app
 const app = express();
-
 app.use(express.json());
+
+// Determine the current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.PORT || 3000;
@@ -67,10 +75,12 @@ app.delete('/members/:username', async (req, res) => {
   }
 });
 
+// Serve 'index.html' for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

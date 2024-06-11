@@ -1,25 +1,23 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
 
 dotenv.config();
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static('public'));
 
 const PORT = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI;
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch((err) => {
-  console.error('Error connecting to MongoDB:', err);
-});
+mongoose.connect(mongoURI)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
 
 const memberSchema = new mongoose.Schema({
   rank: String,
@@ -34,7 +32,7 @@ app.post('/members', async (req, res) => {
   try {
     const newMember = new Member(req.body);
     await newMember.save();
-    console.log('Member added:', newMember); // Log the inserted member
+    console.log('Member added:', newMember);
     res.status(201).send(newMember);
   } catch (error) {
     console.error('Error inserting member:', error);
@@ -50,6 +48,7 @@ app.put('/members/:username', async (req, res) => {
     }
     res.send(member);
   } catch (error) {
+    console.error('Error updating member:', error);
     res.status(400).send(error);
   }
 });
@@ -62,10 +61,11 @@ app.delete('/members/:username', async (req, res) => {
     }
     res.send(member);
   } catch (error) {
+    console.error('Error deleting member:', error);
     res.status(400).send(error);
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

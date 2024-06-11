@@ -23,7 +23,10 @@ h1 {
 
 input {
    border-radius: 12px;
-   border: 0.8px solid black;
+   border: 0.7px solid black;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+   background: linear-gradient(145deg, #ffffff, #e6e6e6);
+   background: rgba(255,255,255,0.7);
 }
 
 .container {
@@ -49,6 +52,12 @@ input {
    width: 100%;
    padding: 8px;
    box-sizing: border-box;
+}
+
+#memberForm {
+   padding: 10px;
+   /* border: 0.5px solid black; */
+   border-radius: 12px;
 }
 
 button {
@@ -97,7 +106,7 @@ button:hover {
    position: relative;
    border-radius: 12px;
    width: auto; 
-   margin-top: 20px;
+   margin: 12px 0;
    padding: 3px; 
    display: flex;
 }
@@ -124,4 +133,23 @@ button:hover {
 
 .clear-icon {
    right: 10px; 
+}
+
+#userList {
+   padding: 10px;
+   border: 0.5px solid grey;
+   border-radius: 12px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+   background: linear-gradient(145deg, #ffffff, #e6e6e6);
+   background: rgba(255,255,255,0.7);
+}
+
+div .user-item p {
+   margin-top: 5px;
+   margin-bottom: 0;
+}
+
+div #userListContainer h3 {
+   margin: 12px;
+   border-bottom: 0.5px solid black;
 }

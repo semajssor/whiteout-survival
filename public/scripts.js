@@ -6,7 +6,7 @@ document.getElementById('memberForm').addEventListener('submit', function (e) {
     power: document.getElementById('power').value,
     level: parseInt(document.getElementById('level').value)
   };
-  const method = data.username ? 'PUT' : 'POST';
+  const method = data.username ? 'POST' : 'PUT';
   const url = method === 'PUT' ? `/members/${data.username}` : '/members'; // Determine URL based on method
 
   fetch(url, {
@@ -24,7 +24,7 @@ document.getElementById('memberForm').addEventListener('submit', function (e) {
   })
   .then(data => {
     resetForm();
-    if (method === 'PUT') {
+    if (method === 'POST') {
       showSuccessMessage('Member updated successfully');
     } else {
       showSuccessMessage('Member added successfully');
@@ -123,10 +123,10 @@ function displayUsers() {
         const userDiv = document.createElement('div');
         userDiv.classList.add('user-item');
         userDiv.innerHTML = `
-          <p>Rank: ${user.rank}</p>
-          <p>Username: ${user.username}</p>
-          <p>Power: ${user.power}</p>
-          <p>Level: ${user.level}</p>
+          <p><i class="fas fa-star"></i> Rank: ${user.rank}</p>
+          <p><i class="fas fa-crown"></i> Username: ${user.username}</p>
+          <p><i class="fas fa-hand-rock"></i> Power: ${user.power}</p>
+          <p><i class="fas fa-chess-rook"></i> Level: ${user.level}</p>
         `;
         userList.appendChild(userDiv);
       });

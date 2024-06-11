@@ -66,6 +66,16 @@ app.delete('/members/:username', async (req, res) => {
   }
 });
 
+app.get('/members', async (req, res) => {
+  try {
+    const members = await Member.find();
+    res.send(members);
+  } catch (error) {
+    console.error('Error fetching members:', error);
+    res.status(500).send(error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

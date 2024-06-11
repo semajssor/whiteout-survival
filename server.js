@@ -11,13 +11,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/alliance')
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
   })
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
-  });
+});
 
 // Define Mongoose schema and model
 const memberSchema = new mongoose.Schema({
@@ -29,6 +29,26 @@ const memberSchema = new mongoose.Schema({
 const Member = mongoose.model('Member', memberSchema);
 
 // API routes
+function displayUsers() {
+  fetch('/members')
+    .then(response => response.json())
+    .then(data => {
+      const userList = document.getElementById('userList');
+      userList.innerHTML = '';
+      data.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.classList.add('user-item');
+        userDiv.innerHTML = `
+          <p>Rank: ${user.rank}</p>
+          <p>Username: ${user.username}</p>
+          <p>Power: ${user.power}</p>
+          <p>Level: ${user.level}</p>
+        `;
+        userList.appendChild(userDiv);
+      });
+    });
+}
+
 app.post('/members', async (req, res) => {
   try {
     const newMember = new Member(req.body);

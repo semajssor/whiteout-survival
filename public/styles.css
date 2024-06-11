@@ -9,7 +9,7 @@ body {
    align-items: center;
    flex-direction: column;
    height: 100vh;
-   background-image: url('../assets/background.jpeg'); /* Adjusted path to go up one level to assets folder */
+   background-image: url('../assets/background.jpeg'); 
    background-repeat: no-repeat;
    background-position: center center;
    background-size: cover;
@@ -68,3 +68,21 @@ button.delete {
 button:hover {
    filter: brightness(90%);
 }
+
+.success-message, .error-message {
+   padding: 10px;
+   margin: 10px 0;
+   border-radius: 5px;
+   text-align: center;
+ }
+ 
+ .success-message {
+   background-color: #28a745;
+   color: white;
+ }
+ 
+ .error-message {
+   background-color: #dc3545;
+   color: white;
+ }
+ 

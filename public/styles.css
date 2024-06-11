@@ -10,6 +10,10 @@ body {
    flex-direction: column;
    height: 100vh;
    background-image: url('/assets/background.jpeg');
+   background-repeat: no-repeat;
+   background-position: center center;
+   background-size: cover;
+   background-attachment: fixed;
 }
 
 h1 {

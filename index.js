@@ -18,6 +18,9 @@ const PORT = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI;
 
 mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false, 
 })
 .then(() => {
   console.log('Connected to MongoDB');
@@ -33,6 +36,11 @@ const memberSchema = new mongoose.Schema({
   level: Number
 });
 const Member = mongoose.model('Member', memberSchema);
+
+app.use((err, req, res, next) => {
+  console.error('Error:', err.stack);
+  res.status(500).send('Something broke!');
+});
 
 app.post('/members', async (req, res) => {
   try {

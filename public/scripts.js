@@ -1,18 +1,18 @@
 document.getElementById('memberForm').addEventListener('submit', function (e) {
   e.preventDefault();
   const data = {
-      rank: parseInt(document.getElementById('rank').value),
-      username: document.getElementById('username').value,
-      power: document.getElementById('power').value,
-      level: parseInt(document.getElementById('level').value)
+    rank: parseInt(document.getElementById('rank').value),
+    username: document.getElementById('username').value,
+    power: document.getElementById('power').value,
+    level: parseInt(document.getElementById('level').value)
   };
-  const method = data.username ? 'PUT' : 'POST'; 
-  const url = data.username ? `/members/${data.username}` : '/members';
+  const method = data.username ? 'PUT' : 'POST';
+  const url = method === 'PUT' ? `/members/${data.username}` : '/members'; // Determine URL based on method
 
   fetch(url, {
     method: method,
     headers: {
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   })
@@ -20,19 +20,16 @@ document.getElementById('memberForm').addEventListener('submit', function (e) {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    if (response.status === 204) {
-      resetForm();
-      showSuccessMessage('Member deleted successfully');
-    } else {
-      return response.json();
-    }
+    return response.json();
   })
   .then(data => {
-    if (data) {
-      resetForm();
-      showSuccessMessage(method === 'PUT' ? 'Member updated successfully' : 'Member added successfully');
+    resetForm();
+    if (method === 'PUT') {
+      showSuccessMessage('Member updated successfully');
+    } else {
+      showSuccessMessage('Member added successfully');
     }
-    displayUsers(); 
+    displayUsers(); // Refresh user list after add/update
   })
   .catch(error => {
     console.error('Error:', error);
@@ -42,17 +39,17 @@ document.getElementById('memberForm').addEventListener('submit', function (e) {
 
 document.querySelector('.update').addEventListener('click', function () {
   const data = {
-      rank: parseInt(document.getElementById('rank').value),
-      username: document.getElementById('username').value,
-      power: document.getElementById('power').value,
-      level: parseInt(document.getElementById('level').value)
+    rank: parseInt(document.getElementById('rank').value),
+    username: document.getElementById('username').value,
+    power: document.getElementById('power').value,
+    level: parseInt(document.getElementById('level').value)
   };
   fetch(`/members/${data.username}`, {
-      method: 'PUT',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
   })
   .then(response => {
     if (!response.ok) {
@@ -71,7 +68,7 @@ document.querySelector('.update').addEventListener('click', function () {
 document.querySelector('.delete').addEventListener('click', function () {
   const username = document.getElementById('username').value;
   fetch(`/members/${username}`, {
-      method: 'DELETE'
+    method: 'DELETE'
   })
   .then(response => {
     if (!response.ok) {
@@ -79,7 +76,7 @@ document.querySelector('.delete').addEventListener('click', function () {
     }
     resetForm();
     showSuccessMessage('Member deleted successfully');
-    displayUsers(); 
+    displayUsers(); // Refresh user list after delete
   })
   .catch(error => {
     console.error('Error:', error);
@@ -97,7 +94,7 @@ function showSuccessMessage(message) {
   successMessage.classList.add('success-message');
   document.querySelector('.container').insertAdjacentElement('afterbegin', successMessage);
   setTimeout(() => {
-      successMessage.remove();
+    successMessage.remove();
   }, 4000);
 }
 
@@ -107,37 +104,37 @@ function showErrorMessage(message) {
   errorMessage.classList.add('error-message');
   document.querySelector('.container').insertAdjacentElement('afterbegin', errorMessage);
   setTimeout(() => {
-      errorMessage.remove();
+    errorMessage.remove();
   }, 4000);
 }
 
 function displayUsers() {
   fetch('/members')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-          const userList = document.getElementById('userList');
-          userList.innerHTML = '';
-          data.forEach(user => {
-              const userDiv = document.createElement('div');
-              userDiv.classList.add('user-item');
-              userDiv.innerHTML = `
-                  <p>Rank: ${user.rank}</p>
-                  <p>Username: ${user.username}</p>
-                  <p>Power: ${user.power}</p>
-                  <p>Level: ${user.level}</p>
-              `;
-              userList.appendChild(userDiv);
-          });
-      })
-      .catch(error => {
-        console.error('Error fetching users:', error);
-        showErrorMessage('Error fetching users');
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const userList = document.getElementById('userList');
+      userList.innerHTML = '';
+      data.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.classList.add('user-item');
+        userDiv.innerHTML = `
+          <p>Rank: ${user.rank}</p>
+          <p>Username: ${user.username}</p>
+          <p>Power: ${user.power}</p>
+          <p>Level: ${user.level}</p>
+        `;
+        userList.appendChild(userDiv);
       });
+    })
+    .catch(error => {
+      console.error('Error fetching users:', error);
+      showErrorMessage('Error fetching users');
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -148,18 +145,18 @@ document.getElementById('searchBar').addEventListener('input', function (e) {
   const query = e.target.value.trim().toLowerCase();
   const userItems = document.querySelectorAll('.user-item');
   userItems.forEach(item => {
-      const username = item.querySelector('p:nth-child(2)').textContent.toLowerCase();
-      if (username.includes(query)) {
-          item.style.display = '';
-      } else {
-          item.style.display = 'none';
-      }
+    const username = item.querySelector('p:nth-child(2)').textContent.toLowerCase();
+    if (username.includes(query)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
   });
 });
 
 document.querySelector('.clear-icon').addEventListener('click', function () {
   document.getElementById('searchBar').value = '';
   document.querySelectorAll('.user-item').forEach(item => {
-      item.style.display = '';
+    item.style.display = '';
   });
 });

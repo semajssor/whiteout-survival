@@ -153,3 +153,13 @@ div #userListContainer h3 {
    margin: 12px;
    border-bottom: 0.5px solid black;
 }
+
+div.user-item {
+   padding: 10px;
+   margin-bottom: 8px;
+   border: 0.5px solid grey;
+   border-radius: 12px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+   background: linear-gradient(145deg, #ffffff, #e6e6e6);
+   background: rgba(255,255,255,0.7);
+}

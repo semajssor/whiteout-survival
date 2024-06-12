@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // Add event listeners and functions inside this block to ensure DOM is fully loaded
 
   document.getElementById('memberForm').addEventListener('submit', function (e) {
     e.preventDefault();

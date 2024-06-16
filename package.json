@@ -1,12 +1,12 @@
 {
-  "name": "y",
+  "name": "WhiteoutSurvival",
   "version": "1.0.0",
-  "description": "Database for Whiteout Survivors",
+  "description": "Database for Whiteout Survival",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node scripts.js"
   },
   "author": "Lord James",
   "license": "ISC",
